@@ -14,23 +14,21 @@ pacman::p_load("googleAnalyticsR",
                "tidyverse")
 ga_auth()
 
+#ID de la vista de GA.
 ga.cuentas <- ga_account_list()
-
 #Modificar el regex del nombre la cuenta para obtener el ID dequerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
   filter(grepl("best",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[9]
+view.id <- cuentas$viewId[7]
 
 # Configuraciones Globales ---------------------------------------------------------
 #Colores personalizados
 customGreen0 <- "#DeF7E9"
 customGreen <- "#71CA97"
 customRed <- "#ff7f7f"
-#ID de la vista de GA.
-# view.id <- 185088761
 #Fechas
 start.date <- "2019-03-01"
 end.date <- "2019-03-31"
