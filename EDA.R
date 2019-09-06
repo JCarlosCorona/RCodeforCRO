@@ -14,10 +14,10 @@ ga.cuentas <- ga_account_list()
 #Modificar el regex del nombre la cuenta para obtener el ID dequerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
-  filter(grepl("best",accountName,ignore.case = TRUE))
+  filter(grepl("coppel",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[7]
+view.id <- cuentas$viewId[11]
 #Fechas
 start.date <- "2019-01-01"
 end.date <- "2019-03-31"

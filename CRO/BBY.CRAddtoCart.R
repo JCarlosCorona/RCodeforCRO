@@ -4,7 +4,8 @@ pacman::p_load(googleAnalyticsR,
                dplyr,
                corrplot,
                tidyverse,
-               googleAuthR)
+               googleAuthR,
+               ggplot2)
 # Configuraciones Globales ---------------------------------------------------------
 #ID de la vista de GA
 ga_auth()
@@ -50,3 +51,9 @@ ga.data2 <- google_analytics(viewId = view.id,
                              anti_sample = T
 )
 head(ga.data2)
+
+checkout2019 <- ga.data1 %>% 
+  filter(!grepl("CHECKOUT_.",shoppingStage))
+
+
+

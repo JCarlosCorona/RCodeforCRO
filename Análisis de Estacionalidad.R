@@ -1,28 +1,37 @@
 # Carga/Instalacion de Librerias ---------------------------------------------------------
 if (!require("pacman"))
   install.packages("pacman")
-pacman::p_load("googleAnalyticsR",
-               "lubridate",
-               "fpp",
-               "forecast",
-               "ggplot2",
-               "gridExtra")
+pacman::p_load(googleAnalyticsR,
+               tidyverse,
+               lubridate,
+               fpp,
+               forecast,
+               ggplot2,
+               gridExtra)
 ga_auth()
+
+#ID de la vista de GA.
+ga.cuentas <- ga_account_list()
+#Modificar el regex del nombre la cuenta para obtener el ID dequerido
+cuentas <- ga.cuentas %>%
+  select(accountName, webPropertyName, viewName, viewId) %>% 
+  filter(grepl("chedraui",accountName,ignore.case = TRUE))
+cuentas
+#Colocar el numero de fila de la vista requerida
+view.id <- cuentas$viewId[13]
 
 # Configuraciones Globales ---------------------------------------------------------
 #Establecer Configuración Regional en Español (para los días de la semana)
 Sys.setlocale("LC_TIME", "es_ES.UTF-8")
-#ID de la vista de GA.
-view_id <- 101577225
 #Fechas
 start_date <- "2019-01-01"
-end_date <- "2019-03-31"
+end_date <- "2019-07-31"
 #TRUE para dejar el sampleo de la data y FALSE para desactivarlo.
 sampling <- TRUE
 
 # Extracción de la Data de la API de Google Analytics ---------------------------------------------------------
 df = google_analytics(
-  viewId = view_id,
+  viewId = view.id,
   date_range = c(start_date,
                  end_date),
   metrics = c("users"),
