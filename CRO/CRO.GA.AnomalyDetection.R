@@ -12,14 +12,14 @@ ga.cuentas <- ga_account_list()
 #Modificar el regex del nombre la cuenta para obtener el ID dequerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
-  filter(grepl("coppel",accountName,ignore.case = TRUE))
+  filter(grepl("hoteles",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[7]
+view.id <- cuentas$viewId[8]
 
 #Fechas del Análisis
-start_date <- "2019-08-01"        # 30 days back from yesterday
-end_date <- "2019-08-31"          # Yesterday
+start_date <- "2019-06-01"        # 30 days back from yesterday
+end_date <- "2019-07-31"          # Yesterday
 
 #Samplig?
 sampling <- FALSE
@@ -27,12 +27,12 @@ sampling <- FALSE
 #Filtro de dimensión
 my_dim_filter_object <- dim_filter("sourceMedium", 
                                    operator = "REGEXP",
-                                   expressions = "google...cpc")
+                                   expressions = "direct")
 
 my_dim_filter_clause <- filter_clause_ga4(list(my_dim_filter_object),
                                           operator = "AND")
 #Metrica a Análizar
-metrica <- "transactions"
+metrica <- "sessions"
 #Llamada a la API de GA
 ga_data <- google_analytics(viewId = view_id,
                               date_range = c(start_date, end_date),
@@ -45,7 +45,7 @@ head(ga_data)
 ga.ts <- as_tibble(ga_data)
 
 ga.ts %>% 
-  time_decompose(metrica, method = "stl", frequency = "auto", trend = "auto") %>%
+  time_decompose(metrica, method = "twitter", frequency = "auto", trend = "auto") %>%
   anomalize(remainder, method = "gesd", alpha = 0.05, max_anoms = 0.2) %>%
   plot_anomaly_decomposition()
 
