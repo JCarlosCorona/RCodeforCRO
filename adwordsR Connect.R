@@ -1,4 +1,5 @@
-library(RAdwords)
+#https://cran.r-project.org/web/packages/adwordsR/readme/README.html
+library(adwordsR)
 library(lubridate)
 
 #Client ID <- 798882676056-92lpn0aq0fqu6dvuukqqi59dsb8hulr9.apps.googleusercontent.com

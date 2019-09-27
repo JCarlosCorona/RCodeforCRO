@@ -16,28 +16,57 @@ cuentas <- ga.cuentas %>%
   filter(grepl("coppel",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[9]
+view.id <- cuentas$viewId[11]
 #Fechas
-start_date <- "2019-07-03"
-end_date <- "2019-07-10"
+start_date <- "2019-07-05"
+end_date <- "2019-07-27"
 
 #TRUE para dejar el sampleo de la data y FALSE para desactivarlo.
 sampling <- FALSE
 
 
 # Extracción de la Data de la API de Google Analytics ---------------------------------------------------------
+dimfilter1<- dim_filter("eventCategory", 
+                        operator = "REGEXP",
+                        expressions = "Detalle producto")
+dimfilter2<- dim_filter("eventAction", 
+                        operator = "REGEXP",
+                        expressions = "Ver otro producto . Seleccionar")
+filter <- filter_clause_ga4(list(dimfilter1,dimfilter2),
+                            operator = "AND")
+
+events <-  google_analytics(
+  viewId = view.id,
+  date_range = c(start_date,
+                 end_date),
+  metrics = c(
+    "totalEvents"),
+  dimensions = "date",
+  dim_filters = filter,
+  anti_sample = sampling)
+
+head(events)
+
 correlation <-  google_analytics(
   viewId = view.id,
   date_range = c(start_date,
                  end_date),
   metrics = c(
-    "transactions"),
+    "itemRevenue",
+    "uniquePurchases",
+    "itemQuantity",
+    "revenuePerItem",
+    "itemsPerPurchase",
+    "cartToDetailRate",
+    "buyToDetailRate"),
   dimensions = "date",
   anti_sample = sampling)
 
 head(correlation)
 
+events.test  <- select(events, -c(date))
 correl.test <- select(correlation, -c(date))
-M <- cor(correl.test)
+corr <- cbind(events.test,correl.test)
+M <- cor(corr)
 
 corrplot.mixed(M)

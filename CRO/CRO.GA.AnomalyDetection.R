@@ -9,7 +9,7 @@ ga_auth()
 
 #ID de la vista de GA.
 ga.cuentas <- ga_account_list()
-#Modificar el regex del nombre la cuenta para obtener el ID dequerido
+#Modificar el regex del nombre la cuenta para obtener el ID requerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
   filter(grepl("hoteles",accountName,ignore.case = TRUE))
