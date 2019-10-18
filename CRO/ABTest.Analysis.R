@@ -29,9 +29,12 @@ hist(d.test$Revenue)
 d.test %>% 
   filter(Conversion == 1)
 
+d.test$Revenue[which(d.test$Conversion == 1)]
+
 #Paso 5: Crear una nueva métrica que sea la suma de las otras
 d.test <- d.test %>% 
   mutate(Engagement = VideoPlays + PageViews + Conversion * 5)
+head(d.test)
 
 #Paso 6: Correr un power analysis para las métricas que nos interesan.
   #Calcular el tamaño de la muestra para ambas variantes en el test.
@@ -47,7 +50,7 @@ test.ready <- d.test %>%
 
 #Paso 8: Dividir lada Data de A y B en grupos separados
 A <-  test.ready[which(test.ready$Variant == "A"),]
-A <-  test.ready[which(test.ready$Variant == "B"),]
+B <-  test.ready[which(test.ready$Variant == "B"),]
 
 #Paso 9: Correr el t.test en las métricas continuas y graficar las distribución.
 t.test(A$Engagement, B$Engagement)
@@ -56,7 +59,7 @@ ggplot(data = test.ready, aes(x = test.ready$Engagement, col = Variant)) +
   geom_density()
 
 #Paso 10: Correr un modelo lineal sobre la data en cualquier métrica.
-model <- lm(data = test.ready, Revenue ∼ Engagement)
+model <- lm(data = test.ready, Revenue - Engagement)
 summary(model)
 
 #Paso 11: Correr un test Anova en la Data
