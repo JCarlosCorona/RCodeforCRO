@@ -10,21 +10,30 @@ pacman::p_load("googleAnalyticsR",
 # been saved or not, this may pop you over to a browser to authenticate.
 ga_auth
 
-# Set the view ID and the date range. If you want to, you can swap out the Sys.getenv()
-# call and just replace that with a hardcoded value for the view ID. And, the start 
-# and end date are currently set to choose the last 30 days, but those can be 
-# hardcoded as well.
-view_id <- Sys.getenv("GA_VIEW_ID")
-start_date <- Sys.Date() - 300        # 300 days back from yesterday
-end_date <- Sys.Date() - 1           # Yesterday
+#ID de la vista de GA.
+ga.cuentas <- ga_account_list()
+1
+#Modificar el regex del nombre la cuenta para obtener el ID dequerido
+cuentas <- ga.cuentas %>%
+  select(accountName, webPropertyName, viewName, viewId) %>% 
+  filter(grepl("hoteles",accountName,ignore.case = TRUE))
+cuentas
+#Colocar el numero de fila de la vista requerida
+view.id <- cuentas$viewId[9]
+
+#Fechas
+start.date <- "2018-01-01"
+end.date <- "2018-12-31"
+#TRUE para dejar el sampleo de la data y FALSE para desactivarlo.
+sampling <- FALSE
 
 # Get the data. Use the "pivots" parameter to get columns of medium sessions.
 pivotga <- pivot_ga4("channelGrouping",
                    metrics = c("sessions"), 
                    maxGroupCount = 10)
 
-trend_data <- google_analytics(viewId = view_id,
-                           date_range = c(start_date, end_date),
+trend_data <- google_analytics(viewId = view.id,
+                           date_range = c(start.date, end.date),
                            metrics = "sessions", 
                            dimensions = c("date"),
                            pivots = list(pivotga),
