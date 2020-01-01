@@ -8,7 +8,6 @@ pacman::p_load("googleAnalyticsR",
                "ggplot2",
                "gridExtra",
                "data.table",
-               "dplyr",
                "formattable",
                "tidyr",
                "tidyverse")
@@ -19,10 +18,10 @@ ga.cuentas <- ga_account_list()
 #Modificar el regex del nombre la cuenta para obtener el ID dequerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
-  filter(grepl("hoteles",accountName,ignore.case = TRUE))
+  filter(grepl("inter",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[9]
+view.id <- cuentas$viewId[2]
 
 # Configuraciones Globales ---------------------------------------------------------
 #Colores personalizados
@@ -30,8 +29,8 @@ customGreen0 <- "#DeF7E9"
 customGreen <- "#71CA97"
 customRed <- "#ff7f7f"
 #Fechas
-start.date <- "2019-03-01"
-end.date <- "2019-03-31"
+start.date <- "2019-11-01"
+end.date <- "2019-11-30"
 #TRUE para dejar el sampleo de la data y FALSE para desactivarlo.
 sampling <- FALSE
 

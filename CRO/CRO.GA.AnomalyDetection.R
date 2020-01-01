@@ -6,20 +6,20 @@ pacman::p_load(googleAnalyticsR,
                anomalize)
 
 ga_auth()
-
+1
 #ID de la vista de GA.
 ga.cuentas <- ga_account_list()
 #Modificar el regex del nombre la cuenta para obtener el ID requerido
 cuentas <- ga.cuentas %>%
   select(accountName, webPropertyName, viewName, viewId) %>% 
-  filter(grepl("hoteles",accountName,ignore.case = TRUE))
+  filter(grepl("best",accountName,ignore.case = TRUE))
 cuentas
 #Colocar el numero de fila de la vista requerida
-view.id <- cuentas$viewId[8]
+view.id <- cuentas$viewId[7]
 
 #Fechas del Análisis
-start_date <- "2019-06-01"        # 30 days back from yesterday
-end_date <- "2019-07-31"          # Yesterday
+start_date <- "2019-01-01"        # 30 days back from yesterday
+end_date <- "2019-11-30"          # Yesterday
 
 #Samplig?
 sampling <- FALSE
@@ -32,9 +32,9 @@ my_dim_filter_object <- dim_filter("sourceMedium",
 my_dim_filter_clause <- filter_clause_ga4(list(my_dim_filter_object),
                                           operator = "AND")
 #Metrica a Análizar
-metrica <- "sessions"
+metrica <- "transactions"
 #Llamada a la API de GA
-ga_data <- google_analytics(viewId = view_id,
+ga_data <- google_analytics(viewId = view.id,
                               date_range = c(start_date, end_date),
                               metrics = metrica,
                               dimensions = c("date"),
